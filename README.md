@@ -1,3 +1,5 @@
+https://docs.google.com/document/d/1R_iUw2CMODhb-yitoh6NWRi3D98xYl2a_6JiyOmSIlY/edit
+
 Connect to postgress database using psql to create the Cars table.
 "psql -h localhost -U <postgres username> -p <port> -d <database name>"
 
