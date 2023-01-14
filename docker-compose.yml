@@ -1,0 +1,32 @@
+services:
+  db:
+    image: postgres
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=pdgc2023Rc!
+      - POSTGRES_DB=postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - data:/var/lib/postgres/data
+  backend:
+    image: backend
+    build: backend
+    restart: always
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./backend:/usr/app
+  frontend:
+    image: frontend
+    restart: always
+    ports:
+      - "8080:8080"
+    expose:
+      - "8080"
+    volumes:
+      - ./frontend:/usr/app
+
+volumes:
+  data:
