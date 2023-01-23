@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export default axios.create({
-  baseURL: "postgres-rds.cdfxk7sszzkb.us-west-2.rds.amazonaws.com",
+  baseURL: "https://vxyqi9vmph.execute-api.us-west-2.amazonaws.com/default",
   headers: {
     "Content-type": "application/json"
   }

@@ -3,27 +3,27 @@ import http from "../http-common";
 class TutorialDataService {
   getAll() {
     console.log("Get all");
-    return http.get("default");
+    return http.get("");
   }
 
   get(id) {
     console.log("Get");
-    return http.get(`default/${id}`);
+    return http.get(`${id}`);
   }
 
   create(data) {
     console.log("Create");
-    return http.post("default", data);
+    return http.post("", data);
   }
 
   update(id, data) {
     console.log("Update");
-    return http.put(`default/${id}`, data);
+    return http.put(`${id}`, data);
   }
 
   delete(id) {
     console.log("Delete");
-    return http.delete(`default/${id}`);
+    return http.delete(`${id}`);
   }
 }
 
