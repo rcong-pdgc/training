@@ -8,7 +8,7 @@ class TutorialDataService {
 
   get(id) {
     console.log("Get");
-    return http.get(`${id}`, {params: {id: id}});
+    return http.get(`${id}`);
   }
 
   create(data) {

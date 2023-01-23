@@ -12,6 +12,7 @@ async function getAllCars(request, response) {
 
 async function getCar(request, response) {
     console.log('Getting car');
+    console.log(request.params.id);
     try {
         let car = await Car.where({ 'id': request.params.id }).fetch({ require: true });
         response.status(200).json(car);

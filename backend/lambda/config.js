@@ -1,7 +1,7 @@
 const knex = require('knex')({
     client: 'pg',
     connection: {
-        host: 'db',
+        host: 'postgres-rds.cdfxk7sszzkb.us-west-2.rds.amazonaws.com',
         user: 'postgres',
         password: 'pdgc2023Rc!',
         database: 'postgres',
