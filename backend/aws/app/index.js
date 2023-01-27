@@ -17,18 +17,14 @@ app.use(
 app.use(cors());
 app.options('*', cors());
 
-app.get('/default/:id', queries.getCar);
+app.get('/:id', queries.getCar);
 
-app.get('/default/', queries.getAllCars);
+app.get('', queries.getAllCars);
 
-app.post('/default/', queries.newCar);
+app.post('', queries.newCar);
 
-app.put('/default/:id', queries.updateCar);
+app.put('/:id', queries.updateCar);
 
-app.delete('/default/:id', queries.deleteCar);
-
-// app.listen(port, () => {
-//     console.log(`App running on port ${port}.`)
-// });
+app.delete('/:id', queries.deleteCar);
 
 module.exports.handler = serverless(app);
