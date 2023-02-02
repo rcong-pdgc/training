@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export default axios.create({
-  baseURL: "https://vxyqi9vmph.execute-api.us-west-2.amazonaws.com/default/",
+  baseURL: "https://us-central1-lively-marking-376003.cloudfunctions.net/crud-api-b84945f",
   headers: {
     "Content-type": "application/json"
   }

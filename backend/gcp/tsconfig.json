@@ -15,5 +15,9 @@
     },
     "files": [
         "index.ts",
+        "app/car.js",
+        "app/config.js",
+        "app/index.js",
+        "app/queries.js"
     ]
 }

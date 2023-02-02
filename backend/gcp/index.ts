@@ -1,31 +1,34 @@
 import * as gcp from "@pulumi/gcp";
+import { asset } from "@pulumi/pulumi";
 
-/**
- * Deploy a function using the default runtime.
- */
-const greeting = new gcp.cloudfunctions.HttpCallbackFunction("greeting", (req: any, res: any) => {
-    res.send(`Greetings from ${req.body.name || "Google Cloud Functions"}!`);
+const project = "lively-marking-376003";
+const bucket = new gcp.storage.Bucket("bucket", {
+    project: project
 });
 
-const invoker = new gcp.cloudfunctions.FunctionIamMember("invoker", {
-    project: greeting.function.project,
-    region: greeting.function.region,
-    cloudFunction: greeting.function.name,
+const bucketObject = new gcp.storage.BucketObject("crud-api-zip", {
+    bucket: bucket.name,
+    source: new asset.AssetArchive({
+        ".": new asset.FileArchive("./app"),
+    }),
+});
+
+const apiFunction = new gcp.cloudfunctions.Function("crud-api", {
+    project: project,
+    sourceArchiveBucket: bucket.name,
+    runtime: "nodejs16",
+    sourceArchiveObject: bucketObject.name,
+    entryPoint: "app",
+    triggerHttp: true,
+    availableMemoryMb: 128,
+});
+
+const invoker = new gcp.cloudfunctions.FunctionIamMember("crud-api-invoker", {
+    project: project,
+    region: apiFunction.region,
+    cloudFunction: apiFunction.name,
     role: "roles/cloudfunctions.invoker",
     member: "allUsers",
 });
 
-export const url = greeting.httpsTriggerUrl;
-
-/**
- * Deploy a function using an explicitly set runtime.
- */
-const runtime = "nodejs14"; // https://cloud.google.com/functions/docs/concepts/exec#runtimes
-const explicitRuntimeGreeting = new gcp.cloudfunctions.HttpCallbackFunction(`greeting-${runtime}`, {
-    runtime: runtime,
-    callback: (req: any, res: any) => {
-        res.send(`Greetings from ${req.body.name || "Google Cloud Functions"}!`);
-    },
-});
-
-export const nodejs14Url = explicitRuntimeGreeting.httpsTriggerUrl;
+export const endpoint = apiFunction.httpsTriggerUrl;
