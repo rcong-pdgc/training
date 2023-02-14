@@ -2,4 +2,5 @@ name: gcloud
 runtime: nodejs
 description: A minimal Google Cloud JavaScript Pulumi program
 config:
+  gcp:project: lively-marking-376003
   gcp:region: us-central1

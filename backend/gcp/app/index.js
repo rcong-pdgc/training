@@ -1,6 +1,5 @@
 const express = require('express');
 const cors = require('cors');
-const serverless = require('serverless-http')
 const bodyParser = require('body-parser');
 const queries = require('./queries');
 
@@ -32,6 +31,6 @@ app.put('/:id', queries.updateCar);
 
 app.delete('/:id', queries.deleteCar);
 
-app.listen(3000);
+app.listen(8080);
 
 module.exports.app = app;

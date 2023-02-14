@@ -1,34 +1,38 @@
+import * as docker from "@pulumi/docker";
 import * as gcp from "@pulumi/gcp";
-import { asset } from "@pulumi/pulumi";
+import * as pulumi from "@pulumi/pulumi";
 
-const project = "lively-marking-376003";
-const bucket = new gcp.storage.Bucket("bucket", {
-    project: project
+const location = gcp.config.region || "us-central1";
+const imageName = "app";
+const myImage = new docker.Image(imageName, {
+    imageName: pulumi.interpolate`gcr.io/${gcp.config.project}/${imageName}:v1.0.0`,
+    build: {
+        context: "./app",
+    },
 });
 
-const bucketObject = new gcp.storage.BucketObject("crud-api-zip", {
-    bucket: bucket.name,
-    source: new asset.AssetArchive({
-        ".": new asset.FileArchive("./app"),
-    }),
+const service = new gcp.cloudrun.Service("nodejs", {
+    location,
+    template: {
+        spec: {
+            containers: [{
+                image: myImage.imageName,
+                resources: {
+                    limits: {
+                        memory: "1Gi",
+                    },
+                },
+            }],
+            containerConcurrency: 50,
+        },
+    },
 });
 
-const apiFunction = new gcp.cloudfunctions.Function("crud-api", {
-    project: project,
-    sourceArchiveBucket: bucket.name,
-    runtime: "nodejs16",
-    sourceArchiveObject: bucketObject.name,
-    entryPoint: "app",
-    triggerHttp: true,
-    availableMemoryMb: 128,
-});
-
-const invoker = new gcp.cloudfunctions.FunctionIamMember("crud-api-invoker", {
-    project: project,
-    region: apiFunction.region,
-    cloudFunction: apiFunction.name,
-    role: "roles/cloudfunctions.invoker",
+const iam = new gcp.cloudrun.IamMember("everyone", {
+    service: service.name,
+    location,
+    role: "roles/run.invoker",
     member: "allUsers",
 });
 
-export const endpoint = apiFunction.httpsTriggerUrl;
+export const url = service.statuses[0].url;
