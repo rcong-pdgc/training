@@ -1,7 +1,8 @@
 const Car = require('./car');
+const publish = require('./pubsub');
 
 async function getAllCars(request, response) {
-    console.log('Getting all cars');
+    publish('Getting all cars');
     try {
         let cars = await Car.fetchAll();
         response.status(200).json(cars);
@@ -11,8 +12,8 @@ async function getAllCars(request, response) {
 }
 
 async function getCar(request, response) {
-    console.log('Getting car');
-    console.log(request.params.id);
+    publish('Getting car');
+    publish(request.params.id);
     try {
         let car = await Car.where({ 'id': request.params.id }).fetch({ require: true });
         response.status(200).json(car);
@@ -22,7 +23,7 @@ async function getCar(request, response) {
 }
 
 async function newCar(request, response) {
-    console.log('Creating new car');
+    publish('Creating new car');
     try {
         let body = request.body;
         let car = await Car.forge({ make: body.make, 'model': body.model, 'year': body.year }).save();
@@ -33,7 +34,7 @@ async function newCar(request, response) {
 }
 
 async function updateCar(request, response) {
-    console.log('Updating car');
+    publish('Updating car');
     try {
         let car = await Car.where({ 'id': request.params.id }).fetch({ require: true });
         let body = request.body;
@@ -48,7 +49,7 @@ async function updateCar(request, response) {
 }
 
 async function deleteCar(request, response) {
-    console.log('Deleting car');
+    publish('Deleting car');
     try {
         await Car.where({ 'id': request.params.id }).destroy();
         response.status(200).json({});
