@@ -182,7 +182,7 @@ metadata:
       manager: vpa-recommender
       operation: Update
       subresource: status
-      time: '2023-02-16T00:03:31Z'
+      time: '2023-02-16T00:08:32Z'
   name: training-deployment-hpa-de0p
   namespace: default
 spec:
